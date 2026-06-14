@@ -1288,5 +1288,30 @@
     });
   });
 </script>
+
+<!-- Soporte MIVO – Widget de Chat -->
+<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+<script type="module">
+  import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+  createChat({
+    webhookUrl: 'https://n8n-n8n.5gx49t.easypanel.host/webhook/soporte-mivo-widget/chat',
+    mode: 'window',
+    chatInputKey: 'chatInput',
+    chatSessionKey: 'sessionId',
+    initialMessages: [
+      'Bienvenido a Soporte MIVO.\nPara registrar su consulta necesito:\n1. Nombre completo\n2. Nombre de la farmacia\n3. Usuario del sistema MIVO'
+    ],
+    i18n: {
+      en: {
+        title: 'Soporte MIVO',
+        subtitle: 'Asistente técnico · Mervis Technology',
+        footer: '',
+        getStarted: 'Nueva consulta',
+        inputPlaceholder: 'Escriba su consulta...',
+        closeButtonTooltip: 'Cerrar chat',
+      },
+    },
+  });
+</script>
 </body>
 </html>
