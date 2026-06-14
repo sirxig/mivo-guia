@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía MIVO – Optimizando la Productividad Organizacional</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --navy:    #0F2540;
+    --blue:    #1B4F8A;
+    --mid:     #2E6DB4;
+    --sky:     #4A90C4;
+    --accent:  #F0A500;
+    --slate:   #4A5568;
+    --mist:    #EDF2F7;
+    --fog:     #F7FAFC;
+    --border:  #CBD5E0;
+    --white:   #FFFFFF;
+    --text:    #1A202C;
+    --subtext: #4A5568;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--fog);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, var(--mid) 100%);
+    color: var(--white);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo-badge {
+    background: var(--accent);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 1.5px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .header-title h1 {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    line-height: 1.3;
+  }
+  .header-title p {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(160deg, var(--navy) 0%, var(--blue) 100%);
+    color: var(--white);
+    padding: 72px 32px 64px;
+    text-align: center;
+  }
+  .hero h2 {
+    font-size: clamp(26px, 4vw, 42px);
+    font-weight: 700;
+    line-height: 1.2;
+    max-width: 720px;
+    margin: 0 auto 16px;
+  }
+  .hero h2 span { color: var(--accent); }
+  .hero p {
+    font-size: 16px;
+    opacity: 0.82;
+    max-width: 560px;
+    margin: 0 auto 32px;
+  }
+  .hero-badges {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: var(--white);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 0;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 61px;
+    height: calc(100vh - 61px);
+    overflow-y: auto;
+    padding: 24px 0;
+  }
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--subtext);
+    padding: 0 20px 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    font-size: 13px;
+    color: var(--slate);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.35;
+  }
+  .sidebar nav a:hover {
+    background: var(--mist);
+    color: var(--blue);
+    border-left-color: var(--sky);
+  }
+  .sidebar nav a.active {
+    background: #EBF3FB;
+    color: var(--blue);
+    border-left-color: var(--blue);
+    font-weight: 600;
+  }
+  .sidebar nav a .icon { font-size: 15px; flex-shrink: 0; }
+  .nav-section {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--subtext);
+    padding: 16px 20px 4px;
+  }
+
+  /* ── CONTENT ── */
+  .content {
+    flex: 1;
+    min-width: 0;
+    padding: 40px 48px;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+  .section-header {
+    background: linear-gradient(90deg, var(--blue), var(--mid));
+    color: var(--white);
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-header .s-icon { font-size: 22px; }
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .section-header p {
+    font-size: 13px;
+    opacity: 0.82;
+    margin-top: 3px;
+  }
+  .section-body { padding: 28px; }
+
+  /* ── SUBSECTION ── */
+  .subsection {
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .subsection:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .subsection h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .subsection h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blue);
+    margin: 18px 0 10px;
+  }
+  .subsection p { color: var(--slate); margin-bottom: 10px; }
+  .subsection ul, .subsection ol {
+    padding-left: 22px;
+    color: var(--slate);
+  }
+  .subsection li { margin-bottom: 6px; }
+
+  /* ── PROCEDURE ── */
+  .procedure {
+    background: var(--fog);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .procedure-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .steps { list-style: none; padding: 0; counter-reset: steps; }
+  .steps li {
+    counter-increment: steps;
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .steps li::before {
+    content: counter(steps);
+    background: var(--blue);
+    color: var(--white);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .steps li strong { color: var(--navy); }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .callout.info    { background: #EBF8FF; border-left: 4px solid #4299E1; color: #2B6CB0; }
+  .callout.warning { background: #FFFFF0; border-left: 4px solid #F6AD3C; color: #744210; }
+  .callout.tip     { background: #F0FFF4; border-left: 4px solid #48BB78; color: #22543D; }
+  .callout.danger  { background: #FFF5F5; border-left: 4px solid #FC8181; color: #742A2A; }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th {
+    background: var(--navy);
+    color: var(--white);
+    padding: 11px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+  }
+  td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--slate); }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: var(--fog); }
+  .code { font-family: 'IBM Plex Mono', monospace; font-size: 12px; background: #EDF2F7; padding: 2px 6px; border-radius: 4px; color: var(--navy); }
+
+  /* ── PATH BREADCRUMB ── */
+  .path {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--mist);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--navy);
+    margin: 10px 0 16px;
+    flex-wrap: wrap;
+  }
+  .path span { color: var(--sky); font-weight: 500; }
+  .path .arrow { color: var(--border); }
+
+  /* ── IMAGE PLACEHOLDER ── */
+  .img-placeholder {
+    background: linear-gradient(135deg, var(--mist) 0%, #E2ECF7 100%);
+    border: 2px dashed var(--sky);
+    border-radius: 10px;
+    padding: 40px 24px;
+    text-align: center;
+    margin: 20px 0;
+    color: var(--subtext);
+  }
+  .img-placeholder .ph-icon { font-size: 36px; margin-bottom: 10px; }
+  .img-placeholder p { font-size: 13px; margin: 4px 0; }
+  .img-placeholder .ph-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--sky);
+    margin-bottom: 6px;
+  }
+  .upload-btn {
+    display: inline-block;
+    margin-top: 12px;
+    background: var(--blue);
+    color: var(--white);
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── MOVEMENT TYPES ── */
+  .movement-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .movement-card {
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+  .movement-card.positive { background: #F0FFF4; border-color: #9AE6B4; }
+  .movement-card.negative { background: #FFF5F5; border-color: #FEB2B2; }
+  .movement-card h4 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .movement-card.positive h4 { color: #276749; }
+  .movement-card.negative h4 { color: #9B2C2C; }
+  .movement-card ul { list-style: none; padding: 0; }
+  .movement-card li {
+    padding: 5px 0;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .movement-card li:last-child { border-bottom: none; }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.08);
+    flex-shrink: 0;
+  }
+
+  /* ── ROLE CARD ── */
+  .role-card {
+    background: linear-gradient(135deg, #EBF3FB, #F0F4F8);
+    border: 1px solid #BEE3F8;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .role-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .role-card ul { padding-left: 20px; }
+  .role-card li { margin-bottom: 6px; font-size: 14px; color: var(--slate); }
+
+  /* ── PROCESS FLOW ── */
+  .process-flow { margin: 16px 0; }
+  .process-step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 6px;
+    align-items: flex-start;
+  }
+  .process-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .process-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .process-connector {
+    width: 2px;
+    height: 20px;
+    background: var(--border);
+    margin: 3px 0;
+  }
+  .process-text {
+    padding: 4px 0 16px;
+    font-size: 14px;
+    color: var(--slate);
+  }
+  .process-text strong { color: var(--navy); display: block; font-size: 14px; margin-bottom: 2px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 28px;
+    font-size: 13px;
+    margin-top: 48px;
+  }
+  footer strong { color: var(--accent); }
+
+  /* ── SCROLLBAR ── */
+  .sidebar::-webkit-scrollbar { width: 5px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .content { padding: 24px 20px; }
+    .movement-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo-badge">MIVO</div>
+    <div class="header-title">
+      <h1>Guía de Optimización de Productividad Organizacional</h1>
+      <p>Sistema Administrativo MIVO · Módulo Tesorería</p>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h2>Administración Financiera con <span>MIVO</span></h2>
+  <p>Guía práctica para la gestión de Tesorería, Punto de Venta, Conciliación Bancaria y Cierre de Mes.</p>
+  <div class="hero-badges">
+    <span class="badge">🏦 Tesorería</span>
+    <span class="badge">🖥️ Punto de Venta</span>
+    <span class="badge">📊 Conciliación Bancaria</span>
+    <span class="badge">📅 Cierre de Mes</span>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-label">Contenido</div>
+    <nav>
+      <div class="nav-section">Tesorería</div>
+      <a href="#caja-banco" class="active"><span class="icon">🏦</span> Caja y Banco</a>
+      <a href="#creacion-cajas"><span class="icon">📥</span> Creación de Cajas</a>
+      <a href="#cuentas-bancarias"><span class="icon">🏛️</span> Cuentas Bancarias</a>
+      <a href="#mov-cajas"><span class="icon">🔄</span> Movimientos de Caja</a>
+      <a href="#mov-banco"><span class="icon">🏧</span> Movimientos de Banco</a>
+
+      <div class="nav-section">Punto de Venta</div>
+      <a href="#pos"><span class="icon">🖥️</span> Punto de Venta</a>
+      <a href="#correccion-pago"><span class="icon">✏️</span> Corrección de Pago</a>
+      <a href="#rol-supervisor"><span class="icon">👤</span> Rol del Supervisor</a>
+
+      <div class="nav-section">Gestión de Ingresos</div>
+      <a href="#proceso-ingresos"><span class="icon">💰</span> Proceso Operativo</a>
+      <a href="#depositos-cashea"><span class="icon">💳</span> Depósitos Cashea/Zelle</a>
+      <a href="#pago-movil"><span class="icon">📱</span> Pago Móvil</a>
+      <a href="#efectivo"><span class="icon">💵</span> Efectivo</a>
+      <a href="#banco-transitorio"><span class="icon">🔁</span> Banco Transitorio</a>
+      <a href="#notas-debito"><span class="icon">📋</span> Notas de Débito</a>
+
+      <div class="nav-section">Cierre</div>
+      <a href="#conciliacion"><span class="icon">✅</span> Conciliación Bancaria</a>
+      <a href="#cierre-mes"><span class="icon">📅</span> Cierre de Mes</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+
+    <!-- ══ TESORERÍA: CAJA Y BANCO ══ -->
+    <section class="section" id="caja-banco">
+      <div class="section-header">
+        <span class="s-icon">🏦</span>
+        <div>
+          <h2>Tesorería: Caja y Banco</h2>
+          <p>Gestión integral del efectivo y operaciones bancarias en MIVO</p>
+        </div>
+      </div>
+      <div class="section-body">
+
+        <div class="subsection">
+          <p>La gestión de Caja y Banco es fundamental para controlar y manejar las finanzas de una empresa. Este módulo permite gestionar eficientemente tanto el efectivo disponible como las transacciones bancarias, asegurando una administración financiera precisa y en tiempo real.</p>
+
+          <h4>Funciones principales del módulo</h4>
+          <ul>
+            <li><strong>Creación y administración de cajas:</strong> Permite registrar, modificar, consultar y eliminar cajas dentro del sistema. Cada caja puede configurarse como <em>principal</em> o de <em>punto de venta</em>.</li>
+            <li><strong>Gestión de cuentas bancarias:</strong> Facilita el registro y manejo de múltiples cuentas bancarias, con seguimiento de transacciones, movimientos y saldos en tiempo real.</li>
+            <li><strong>Control de saldos:</strong> Mantiene actualizados los saldos en efectivo y saldos totales de cada caja o cuenta bancaria.</li>
+            <li><strong>Integración con el Punto de Venta:</strong> Permite vincular las cajas al módulo POS, optimizando el registro de cobros y pagos diarios.</li>
+          </ul>
+        </div>
+
+        <!-- 1.1 Creación de Cajas -->
+        <div class="subsection" id="creacion-cajas">
+          <h3>📥 1.1 Creación de Cajas</h3>
+          <p>Las cajas son contenedores financieros utilizados para registrar los ingresos y egresos de efectivo dentro de la empresa. Cada caja puede configurarse como <strong>principal</strong> o de <strong>punto de venta</strong>.</p>
+
+          <div class="procedure">
+            <div class="procedure-title">🔸 Procedimiento para crear una nueva caja</div>
+            <ol class="steps">
+              <li>Acceda al menú: <div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Gestión de Datos</span><span class="arrow">→</span><span>Caja</span></div></li>
+              <li>Seleccione la opción <strong>Caja</strong> y haga clic en <strong>Nuevo</strong>.</li>
+              <li>Complete los campos requeridos: <em>Nombre de la caja</em> (ej. "Caja Principal"), <em>Descripción</em> y <em>Tipo</em> (Principal o Punto de Venta).</li>
+              <li>Presione <strong>Guardar</strong> para registrar la nueva caja.</li>
+            </ol>
+          </div>
+
+          <div class="img-placeholder">
+            <div class="ph-icon">🖥️</div>
+            <div class="ph-label">Pantalla del sistema</div>
+            <p>Ventana de creación de nueva caja en MIVO</p>
+            <button class="upload-btn" onclick="this.closest('.img-placeholder').innerHTML='<p style=\'color:var(--blue);font-weight:600\'>📎 Haga clic aquí para subir la imagen</p>'">+ Agregar captura de pantalla</button>
+          </div>
+
+          <div class="callout info">
+            <span class="callout-icon">💡</span>
+            <div>El sistema MIVO permite gestionar múltiples cajas por empresa, manteniendo actualizado el saldo en efectivo y el saldo total de cada una. Esto facilita un control financiero más exacto y segmentado por área o punto de venta.</div>
+          </div>
+
+          <h4>Funciones adicionales</h4>
+          <ul>
+            <li><strong>Buscar:</strong> Localiza cajas existentes por nombre o código.</li>
+            <li><strong>Modificar:</strong> Permite actualizar los datos de una caja activa.</li>
+            <li><strong>Eliminar:</strong> Elimina cajas que no tengan movimientos asociados.</li>
+          </ul>
+        </div>
+
+        <!-- 1.2 Cuentas Bancarias -->
+        <div class="subsection" id="cuentas-bancarias">
+          <h3>🏛️ 1.2 Gestión de Cuentas Bancarias</h3>
+          <p>El sistema permite registrar y controlar las cuentas bancarias de la empresa, optimizando el seguimiento de los saldos y movimientos generados.</p>
+
+          <div class="procedure">
+            <div class="procedure-title">🔸 Procedimiento para crear una cuenta bancaria</div>
+            <ol class="steps">
+              <li>Ingrese al menú: <div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Gestión de Datos</span><span class="arrow">→</span><span>Cuentas Bancarias</span></div></li>
+              <li>Seleccione la opción <strong>Nuevo</strong>.</li>
+              <li>Complete los campos: Nombre del Banco, Número de Cuenta, Tipo de Cuenta (Corriente / Ahorros), Moneda, Sucursal.</li>
+              <li>Presione <strong>Guardar</strong> para registrar la cuenta bancaria.</li>
+            </ol>
+          </div>
+
+          <div class="callout tip">
+            <span class="callout-icon">📌</span>
+            <div>Utilice como código de cuenta los cuatro primeros dígitos del número de cuenta bancaria, facilitando su identificación en los reportes.</div>
+          </div>
+
+          <h4>Beneficios del control bancario en MIVO</h4>
+          <ul>
+            <li>Seguimiento en tiempo real de saldos y movimientos.</li>
+            <li>Registro confiable de depósitos, transferencias y débitos bancarios.</li>
+            <li>Vinculación directa con los procesos de cobros y pagos del sistema administrativo.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ MOVIMIENTOS DE CAJA ══ -->
+    <section class="section" id="mov-cajas">
+      <div class="section-header">
+        <span class="s-icon">🔄</span>
+        <div>
+          <h2>Movimientos de Cajas</h2>
+          <p>Registro y gestión de todas las transacciones que afectan los saldos de las cajas</p>
+        </div>
+      </div>
+      <div class="section-body">
+
+        <p>Esta funcionalidad permite mantener un registro detallado de todas las transacciones que afectan los saldos de las cajas. El sistema genera movimientos automáticos (provenientes de ventas, cobros, etc.) y también permite realizar movimientos manuales para ajustes o transferencias internas.</p>
+
+        <div class="subsection">
+          <h3>🔸 2.1 Consulta y gestión de movimientos</h3>
+          <div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Operaciones</span><span class="arrow">→</span><span>Movimientos de Cajas</span></div>
+          <p>Consulte los registros existentes para verificar:</p>
+          <ul>
+            <li>Fecha del movimiento</li>
+            <li>Tipo (Ingreso o Egreso)</li>
+            <li>Monto</li>
+            <li>Descripción y forma de pago</li>
+          </ul>
+        </div>
+
+        <div class="subsection">
+          <h3>🔸 2.2 Creación de movimientos manuales</h3>
+          <p>Los movimientos manuales se utilizan para ajustar saldos, trasladar fondos o registrar ingresos adicionales no generados por el punto de venta.</p>
+
+          <div class="procedure">
+            <div class="procedure-title">🧾 Procedimiento</div>
+            <ol class="steps">
+              <li>Haga clic en <strong>Nuevo Movimiento</strong>.</li>
+              <li>Seleccione el tipo: <strong>Ingreso</strong> o <strong>Egreso</strong>.</li>
+              <li>Complete los datos: Descripción, Monto, Forma de pago (efectivo, tarjeta, cheque…), Cuenta de ingreso/egreso.</li>
+              <li>Guarde la información.</li>
+            </ol>
+          </div>
+
+          <div class="callout warning">
+            <span class="callout-icon">🧹</span>
+            <div>Para modificar o eliminar: busque el movimiento en la lista y realice las correcciones necesarias o elimine el registro si procede.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ MOVIMIENTOS DE BANCO ══ -->
+    <section class="section" id="mov-banco">
+      <div class="section-header">
+        <span class="s-icon">🏧</span>
+        <div>
+          <h2>Movimientos de Banco</h2>
+          <p>Control de transacciones en cuentas bancarias</p>
+        </div>
+      </div>
+      <div class="section-body">
+
+        <p>Controla todas las transacciones que afectan el saldo de las cuentas bancarias. Permite registrar movimientos automáticos y manuales.</p>
+
+        <div class="subsection">
+          <h3>🔸 3.1 Consulta y gestión</h3>
+          <div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Operaciones</span><span class="arrow">→</span><span>Movimientos de Banco</span></div>
+          <p>Casos de uso frecuentes:</p>
+          <ul>
+            <li>Transferencias entre cuentas propias.</li>
+            <li>Registro de comisiones bancarias.</li>
+            <li>Notas de débito y crédito.</li>
+          </ul>
+        </div>
+
+        <div class="subsection">
+          <h3>🏷️ Tipos de movimientos disponibles</h3>
+          <div class="movement-grid">
+            <div class="movement-card positive">
+              <h4>⬆️ Incrementan el saldo</h4>
+              <ul>
+                <li><span class="tag">DP</span> Depósito</li>
+                <li><span class="tag">IN</span> Interés</li>
+                <li><span class="tag">NC</span> Nota de Crédito</li>
+                <li><span class="tag">RD</span> Reversión de Débito</li>
+                <li><span class="tag">TP</span> Transferencia Positiva</li>
+              </ul>
+            </div>
+            <div class="movement-card negative">
+              <h4>⬇️ Disminuyen el saldo</h4>
+              <ul>
+                <li><span class="tag">TR</span> Transferencia</li>
+                <li><span class="tag">ND</span> Nota de Débito</li>
+                <li><span class="tag">RC</span> Reversión de Crédito</li>
+                <li><span class="tag">ID</span> Impuesto al Débito Bancario</li>
+                <li><span class="tag">TN</span> Transferencia Negativa</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <h3>🧾 Procedimiento para movimientos bancarios manuales</h3>
+          <div class="procedure">
+            <div class="procedure-title">Pasos</div>
+            <ol class="steps">
+              <li>Haga clic en <strong>Nuevo Movimiento</strong>.</li>
+              <li>Seleccione si el movimiento <em>incrementa o disminuye</em> el saldo.</li>
+              <li>Ingrese la descripción, monto y cuenta afectada.</li>
+              <li>Presione <strong>Guardar</strong>.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <span class="callout-icon">💡</span>
+          <div>
+            <strong>Recomendaciones generales:</strong><br>
+            • Mantenga actualizados los saldos de caja y banco antes de realizar cierres administrativos.<br>
+            • Revise periódicamente los movimientos manuales para garantizar su coherencia con los estados de cuenta reales.<br>
+            • Asigne los permisos de acceso adecuados a los usuarios que gestionan este módulo.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ PUNTO DE VENTA ══ -->
+    <section class="section" id="pos">
+      <div class="section-header">
+        <span class="s-icon">🖥️</span>
+        <div>
+          <h2>Punto de Venta (POS)</h2>
+          <p>Optimización del proceso en el Punto de Venta</p>
+        </div>
+      </div>
+      <div class="section-body">
+
+        <p>El Punto de Venta es una de las áreas más sensibles dentro del sistema MIVO, ya que cada transacción impacta directamente los reportes financieros, las conciliaciones bancarias y el cierre diario de caja.</p>
+
+        <div class="callout warning">
+          <span class="callout-icon">⚠️</span>
+          <div>Es fundamental que el cajero seleccione correctamente la <strong>forma de pago</strong> al momento de registrar una venta.</div>
+        </div>
+
+        <!-- Corrección de pago -->
+        <div class="subsection" id="correccion-pago">
+          <h3>✏️ Corrección de la forma de pago</h3>
+          <p>En caso de que un cobro haya sido registrado con una forma de pago incorrecta (ej: se marcó <em>tarjeta provincial</em> en lugar de <em>pago móvil</em>), el sistema permite realizar una corrección <strong>antes del cierre de caja</strong>.</p>
+
+          <div class="callout danger">
+            <span class="callout-icon">🚫</span>
+            <div>Este proceso <strong>solo aplica a cobros con tarjeta</strong>. No aplica para pagos en efectivo ni transacciones realizadas mediante Cashea.</div>
+          </div>
+
+          <div class="procedure">
+            <div class="procedure-title">🔸 Procedimiento de corrección</div>
+            <ol class="steps">
+              <li>
+                <div><strong>Acceder al módulo de Punto de Venta</strong><br>
+                <div class="path"><span>Punto de Venta</span><span class="arrow">→</span><span>Cierre de Caja</span></div>
+                Se muestran todos los movimientos generados durante la jornada.</div>
+              </li>
+              <li><strong>Localizar el cobro a modificar:</strong> Busque el registro correspondiente al número de cobro. Verifique que el movimiento esté activo y no cerrado.</li>
+              <li>
+                <div><strong>Ingresar al sistema administrativo:</strong>
+                <div class="path"><span>Ventas y Cobros</span><span class="arrow">→</span><span>Operaciones</span><span class="arrow">→</span><span>Cobros</span></div></div>
+              </li>
+              <li><strong>Buscar el cobro específico:</strong> Localícelo mediante número o cliente. Haga doble clic para abrir el registro.</li>
+              <li><strong>Modificar la forma de pago:</strong> Identifique el medio de pago asignado incorrectamente. Sustitúyalo por la opción correcta (Tarjeta, Biopago, Zelle, etc.). Guarde los cambios.</li>
+              <li><strong>Validación final:</strong> Regrese al Cierre de Caja para confirmar que la corrección se refleje adecuadamente. El supervisor debe validar la modificación.</li>
+            </ol>
+          </div>
+
+          <div class="img-placeholder">
+            <div class="ph-icon">🖥️</div>
+            <div class="ph-label">Pantalla del sistema</div>
+            <p>Vista del módulo de Cobros – corrección de forma de pago</p>
+            <button class="upload-btn">+ Agregar captura de pantalla</button>
+          </div>
+        </div>
+
+        <!-- Rol del supervisor -->
+        <div class="subsection" id="rol-supervisor">
+          <div class="role-card">
+            <h4>👤 Rol del Supervisor</h4>
+            <ul>
+              <li>Revisar los cierres de caja antes de su consolidación.</li>
+              <li>Autorizar los cambios de forma de pago efectuados por los cajeros.</li>
+              <li>Supervisar que los movimientos estén correctamente reflejados en los reportes.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ GESTIÓN DE INGRESOS ══ -->
+    <section class="section" id="proceso-ingresos">
+      <div class="section-header">
+        <span class="s-icon">💰</span>
+        <div>
+          <h2>Gestión Financiera de Ingresos de Caja y Banco</h2>
+          <p>Proceso operativo completo desde el punto de venta hasta la conciliación bancaria</p>
+        </div>
+      </div>
+      <div class="section-body">
+
+        <div class="subsection">
+          <h3>📊 Diagrama del Proceso</h3>
+          <div class="process-flow">
+            <div class="process-step">
+              <div class="process-line"><div class="process-dot">1</div><div class="process-connector"></div></div>
+              <div class="process-text"><strong>Efectuar ventas y generar cobros en cajas POS</strong>Los cajeros procesan transacciones con diferentes formas de pago.</div>
+            </div>
+            <div class="process-step">
+              <div class="process-line"><div class="process-dot">2</div><div class="process-connector"></div></div>
+              <div class="process-text"><strong>Verificar montos en la Caja Principal</strong>El supervisor revisa que los montos coincidan con los reportes del día.</div>
+            </div>
+            <div class="process-step">
+              <div class="process-line"><div class="process-dot">3</div><div class="process-connector"></div></div>
+              <div class="process-text"><strong>Depósitos bancarios Cashea y Zelle</strong>Se registran los ingresos por tipo de tarjeta.</div>
+            </div>
+            <div class="process-step">
+              <div class="process-line"><div class="process-dot">4</div><div class="process-connector"></div></div>
+              <div class="process-text"><strong>Traslado de pagos móviles y comisiones</strong>Se transfieren desde la Caja Principal al banco destino.</div>
+            </div>
+            <div class="process-step">
+              <div class="process-line"><div class="process-dot">5</div><div class="process-connector"></div></div>
+              <div class="process-text"><strong>Movimientos de caja del dinero en efectivo</strong>Redistribución hacia subcajas operativas.</div>
+            </div>
+            <div class="process-step">
+              <div class="process-line"><div class="process-dot">6</div><div class="process-connector"></div></div>
+              <div class="process-text"><strong>Depósitos al Banco Transitorio</strong>Depósito de tarjetas PTV, biopago, transferencia por tipo.</div>
+            </div>
+            <div class="process-step">
+              <div class="process-line"><div class="process-dot">7</div><div class="process-connector"></div></div>
+              <div class="process-text"><strong>Egresos Banco Transitorio → bancos correspondientes</strong>Traslado de lotes hacia los bancos destino.</div>
+            </div>
+            <div class="process-step">
+              <div class="process-line"><div class="process-dot">8</div><div class="process-connector"></div></div>
+              <div class="process-text"><strong>Egreso Banco Cashea y Banco Zelle</strong>Registro de liquidaciones diarias.</div>
+            </div>
+            <div class="process-step">
+              <div class="process-line"><div class="process-dot">9</div><div class="process-connector"></div></div>
+              <div class="process-text"><strong>Notas de débito por comisiones bancarias</strong>Registro de cargos aplicados por las entidades.</div>
+            </div>
+            <div class="process-step">
+              <div class="process-line"><div class="process-dot">10</div></div>
+              <div class="process-text"><strong>Conciliación bancaria mensual</strong>Comparación final entre sistema y estados de cuenta del banco.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2.2 Verificación Caja Principal -->
+        <div class="subsection">
+          <h3>🔸 2.2 Verificación en la Caja Principal</h3>
+          <p>La Caja Principal centraliza todos los ingresos provenientes de los puntos de venta. El supervisor debe revisar que los montos coincidan con los reportes del día.</p>
+          <h4>📊 Reportes recomendados para verificación</h4>
+          <ul>
+            <li>Resumen Diario de Cierre de Caja</li>
+            <li>Lotes del Punto de Venta</li>
+            <li>Reporte Z de las impresoras fiscales</li>
+            <li>Estado de Cuenta Bancario (para pagos móviles, biopago, Cashea y Zelle)</li>
+            <li>Ventas financiadas Cashea</li>
+            <li>Soporte de cierre del cajero auxiliar</li>
+          </ul>
+        </div>
+
+        <!-- 2.3 Depósitos Cashea / Zelle -->
+        <div class="subsection" id="depositos-cashea">
+          <h3>💳 2.3 Depósitos Bancarios de Cashea y Zelle</h3>
+          <p>Permite registrar en el sistema los ingresos correspondientes a las ventas procesadas con tarjetas Cashea y Zelle, clasificando cada depósito por tipo de tarjeta.</p>
+
+          <div class="callout info">
+            <span class="callout-icon">💡</span>
+            <div>Se debe realizar <strong>un depósito por cada tipo de tarjeta</strong>, de modo que el registro coincida con los lotes procesados en el punto de venta y reportados por el banco.</div>
+          </div>
+
+          <div class="procedure">
+            <div class="procedure-title">🧭 Procedimiento</div>
+            <ol class="steps">
+              <li><strong>Acceder a la opción Depósito:</strong><div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Caja y Banco</span><span class="arrow">→</span><span>Depósitos Bancarios</span></div></li>
+              <li><strong>Completar la pestaña Generales:</strong> Cuenta Bancaria (Banco Cashea / Cashe1), Fecha del Depósito, Cuenta de Ingreso/Egreso, Número de Planilla.</li>
+              <li><strong>Importar las tarjetas desde la Caja Principal:</strong> El sistema trae automáticamente todos los movimientos del cierre del día.</li>
+              <li><strong>Clasificar el tipo de tarjeta (F4):</strong> Indique la fecha del cierre de caja para identificar correctamente cada depósito.</li>
+              <li><strong>Guardar</strong> el registro del depósito.</li>
+            </ol>
+          </div>
+
+          <div class="img-placeholder">
+            <div class="ph-icon">🖥️</div>
+            <div class="ph-label">Pantalla del sistema</div>
+            <p>Proceso de Depósitos al Banco Cashea y Banco Zelle</p>
+            <button class="upload-btn">+ Agregar captura de pantalla</button>
+          </div>
+
+          <div class="callout tip">
+            <span class="callout-icon">🔁</span>
+            <div>Repita el mismo proceso para las tarjetas <strong>Zelle</strong>, seleccionando el banco correspondiente (Banco Zelle).</div>
+          </div>
+        </div>
+
+        <!-- 2.4 Pago Móvil -->
+        <div class="subsection" id="pago-movil">
+          <h3>📱 2.4 Traslado del Pago Móvil y Comisiones</h3>
+          <p>Permite registrar el movimiento de fondos provenientes de los pagos móviles, trasladándolos desde la Caja Principal hacia la cuenta bancaria destino, con contabilización automática de comisiones.</p>
+
+          <div class="procedure">
+            <div class="procedure-title">🧭 Procedimiento</div>
+            <ol class="steps">
+              <li><strong>Acceder a Cuentas Bancarias:</strong><div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Caja y Banco</span><span class="arrow">→</span><span>Cuentas Bancarias</span></div></li>
+              <li><strong>Seleccionar la cuenta destino</strong> a la cual se transferirán los pagos móviles y sus comisiones.</li>
+              <li><strong>Presionar F6</strong> para abrir la ventana de traslado de Pago Móvil.</li>
+              <li><strong>Configurar fecha y cargar movimientos:</strong> Introduzca el día del movimiento y pulse <em>Cargar PM del Día</em>.</li>
+              <li><strong>Revisar y confirmar</strong> pagos móviles, montos, comisiones y fechas.</li>
+              <li><strong>Procesar:</strong> Haga clic en <em>Procesar</em>. El sistema generará: ingreso bancario por el monto total + egreso bancario por la comisión aplicada.</li>
+            </ol>
+          </div>
+
+          <div class="callout warning">
+            <span class="callout-icon">💡</span>
+            <div>Verifique que la fecha del movimiento coincida con la del banco destino, tomando en cuenta fines de semana y feriados. El monto del pago móvil no debe modificarse — si hay discrepancia, genere la NC o ND que corresponda.</div>
+          </div>
+
+          <div class="img-placeholder">
+            <div class="ph-icon">🖥️</div>
+            <div class="ph-label">Pantalla del sistema</div>
+            <p>Módulo de Pago Móvil – traslado y comisiones</p>
+            <button class="upload-btn">+ Agregar captura de pantalla</button>
+          </div>
+        </div>
+
+        <!-- 2.5 Efectivo -->
+        <div class="subsection" id="efectivo">
+          <h3>💵 2.5 Movimientos de Caja del Dinero en Efectivo</h3>
+          <p>Permite registrar la distribución del dinero en efectivo desde la Caja Principal hacia las diferentes subcajas operativas.</p>
+
+          <h4>Tipos de subcajas</h4>
+          <ul>
+            <li>Caja Efectivo Bs</li>
+            <li>Caja Efectivo Divisa</li>
+            <li>Caja Provisión Divisa</li>
+            <li>Caja Director Divisa</li>
+            <li>Caja Supervisores (Reposición)</li>
+          </ul>
+
+          <h4>Movimiento en Bolívares</h4>
+          <p>Se utilizan cuentas automáticas con prefijo <span class="code">T-0000</span> que registran simultáneamente el egreso de la caja origen y el ingreso en la caja destino.</p>
+
+          <div class="procedure">
+            <div class="procedure-title">🧭 Traslado de Efectivo en Bolívares</div>
+            <ol class="steps">
+              <li><div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Caja y Banco</span><span class="arrow">→</span><span>Movimientos de Caja</span></div></li>
+              <li>Presione <strong>Nuevo</strong>. Seleccione la caja de origen y el tipo <strong>Egreso</strong>.</li>
+              <li>Complete: Forma de Pago (Efectivo), Cuenta T-1003, Monto y Descripción.</li>
+              <li>Verifique la información y presione <strong>Aceptar</strong>.</li>
+            </ol>
+          </div>
+
+          <div class="callout danger">
+            <span class="callout-icon">⚠️</span>
+            <div>Una vez guardado el movimiento, <strong>no puede ser modificado ni eliminado</strong>. Verifique cuidadosamente antes de confirmar.</div>
+          </div>
+
+          <h4>Movimiento en Divisas</h4>
+          <div class="procedure">
+            <div class="procedure-title">🧭 Traslado de Efectivo en Divisas</div>
+            <ol class="steps">
+              <li>Acceda a <div class="path"><span>Movimientos de Caja</span></div></li>
+              <li>Presione <strong>Nuevo</strong> y luego <strong>F4 – Movimientos de Cajas Divisas</strong>.</li>
+              <li>Complete: Caja de Divisa, Caja Bs, Tipo de Movimiento, Monto USD, Tasa y Descripción. El sistema calcula automáticamente el equivalente en Bs.</li>
+              <li>Presione <strong>Aceptar</strong> y confirme el mensaje de seguridad.</li>
+            </ol>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Movimiento generado</th><th>Descripción</th></tr></thead>
+              <tbody>
+                <tr><td>Movimiento 1</td><td>Egreso en la caja de divisas</td></tr>
+                <tr><td>Movimiento 2</td><td>Ingreso en la caja en bolívares</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2.6 Banco Transitorio -->
+        <div class="subsection" id="banco-transitorio">
+          <h3>🔁 2.6 Depósitos al Banco Transitorio</h3>
+          <p>Permite registrar los ingresos de ventas procesadas con tarjetas (PTV, biopago, transferencia), clasificando cada depósito por tipo de tarjeta.</p>
+
+          <div class="procedure">
+            <div class="procedure-title">🧭 Procedimiento</div>
+            <ol class="steps">
+              <li><div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Caja y Banco</span><span class="arrow">→</span><span>Depósitos Bancarios</span></div></li>
+              <li>Seleccione la <strong>cuenta del Banco Transitorio</strong> y complete Fecha, Cuenta I/E y Número de Planilla.</li>
+              <li>Seleccione <strong>Importar Tarjetas de la Caja Principal</strong>.</li>
+              <li>Clasifique cada tipo de tarjeta con <strong>F4</strong> (T0134, T0108, Biopago, etc.).</li>
+              <li>Presione <strong>Guardar</strong>.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 2.7 Egreso Banco Transitorio -->
+        <div class="subsection">
+          <h3>🔸 2.7 Egreso del Banco Transitorio</h3>
+          <p>Traslada los lotes de tarjetas POS hacia los bancos correspondientes. Al finalizar, el <strong>saldo del Banco Transitorio debe quedar en cero</strong>.</p>
+
+          <div class="procedure">
+            <div class="procedure-title">🧭 Procedimiento</div>
+            <ol class="steps">
+              <li><div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Gestión de Datos</span><span class="arrow">→</span><span>Cuentas Bancarias</span></div> Seleccione la cuenta del banco transitorio.</li>
+              <li>Presione <strong>F5</strong> para abrir Transferencias del Banco Transitorio al Banco Destino.</li>
+              <li>Cargue los montos de cada transacción diaria. La diferencia entre el monto POS y el abono real en el banco se trata como <strong>comisión bancaria (Nota de Débito)</strong>.</li>
+              <li>Ejecute las transferencias al banco destino y cargue las comisiones bancarias contra el banco transitorio.</li>
+            </ol>
+          </div>
+
+          <div class="callout tip">
+            <span class="callout-icon">✅</span>
+            <div>Al finalizar, el saldo del Banco Transitorio debe quedar en <strong>cero</strong>, indicando que todas las operaciones han sido correctamente trasladadas y conciliadas.</div>
+          </div>
+        </div>
+
+        <!-- 2.8 Egreso Banco Cashea -->
+        <div class="subsection">
+          <h3>🔸 2.8 Egreso del Banco Cashea</h3>
+          <p>Registra la salida de fondos de las ventas procesadas mediante Cashea mediante una Nota de Débito.</p>
+
+          <div class="procedure">
+            <div class="procedure-title">🧭 Procedimiento</div>
+            <ol class="steps">
+              <li><div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Caja y Banco</span><span class="arrow">→</span><span>Movimientos de Banco</span></div></li>
+              <li>Seleccione la cuenta bancaria <strong>Cashea</strong>.</li>
+              <li>Cree un nuevo movimiento: Tipo = <strong>Nota de Débito</strong>, Fecha de liquidación, Monto total, Cuenta contable y Descripción (ej: "Liquidación de ventas Cashea – 02/09/2025").</li>
+              <li>Presione <strong>Guardar</strong>.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 2.9 Egreso Banco Zelle -->
+        <div class="subsection">
+          <h3>🔸 2.9 Egreso del Banco Zelle</h3>
+          <p>Traslada los montos recibidos en Zelle desde la cuenta bancaria Zelle hacia la Caja Zelle, usando la función rápida <strong>F4</strong>.</p>
+
+          <div class="procedure">
+            <div class="procedure-title">🧭 Procedimiento</div>
+            <ol class="steps">
+              <li><div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Caja y Banco</span><span class="arrow">→</span><span>Movimientos de Banco</span></div></li>
+              <li>Seleccione la <strong>cuenta Zelle</strong> y presione <strong>F4</strong>.</li>
+              <li>Complete: Código banco Zelle, Código Caja Zelle, Monto USD, Tasa y Descripción.</li>
+              <li>Presione <strong>Guardar</strong>.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 2.10 Notas de débito -->
+        <div class="subsection" id="notas-debito">
+          <h3>📋 2.10 Notas de Débito por Comisiones</h3>
+          <p>Refleja en el sistema los descuentos o cargos aplicados por las entidades bancarias por servicios, garantizando que los saldos en MIVO coincidan con los del banco.</p>
+
+          <div class="procedure">
+            <div class="procedure-title">🧭 Pasos para registrar una Nota de Débito</div>
+            <ol class="steps">
+              <li><div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Operaciones</span><span class="arrow">→</span><span>Movimientos de Bancos</span></div></li>
+              <li>Haga clic en <strong>Nuevo</strong> en la pestaña Datos Generales.</li>
+              <li>
+                Complete los campos:
+                <div class="table-wrap" style="margin-top:10px">
+                  <table>
+                    <thead><tr><th>Campo</th><th>Descripción</th></tr></thead>
+                    <tbody>
+                      <tr><td>Fecha</td><td>Fecha exacta en que el banco aplicó la nota de débito</td></tr>
+                      <tr><td>Cuenta</td><td>Cuenta bancaria afectada (ej. BANCO BANESCO)</td></tr>
+                      <tr><td>Tipo de Movimiento</td><td>Nota de Débito</td></tr>
+                      <tr><td>Documento</td><td>Número de referencia del estado de cuenta</td></tr>
+                      <tr><td>Monto</td><td>Valor total del cargo bancario</td></tr>
+                      <tr><td>Cta. Ingr/Egr</td><td>Cuenta contable (ej. E-6222 COMISIONES BANCARIAS)</td></tr>
+                      <tr><td>Descripción</td><td>SERV. MITTO POS / MANTENIMIENTO / COMISIÓN, etc.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+              <li>Presione <strong>Guardar</strong>.</li>
+            </ol>
+          </div>
+
+          <div class="callout warning">
+            <span class="callout-icon">⚠️</span>
+            <div>Si el registro fue ingresado incorrectamente, puede utilizar el botón <strong>Anular</strong> antes de consolidar el cierre bancario.</div>
+          </div>
+
+          <div class="img-placeholder">
+            <div class="ph-icon">🖥️</div>
+            <div class="ph-label">Pantalla del sistema</div>
+            <p>Módulo de Movimientos de Bancos – Notas de Débito</p>
+            <button class="upload-btn">+ Agregar captura de pantalla</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ CONCILIACIÓN BANCARIA ══ -->
+    <section class="section" id="conciliacion">
+      <div class="section-header">
+        <span class="s-icon">✅</span>
+        <div>
+          <h2>Conciliación Bancaria</h2>
+          <p>Comparación de registros contables del sistema con los estados de cuenta bancarios</p>
+        </div>
+      </div>
+      <div class="section-body">
+
+        <div class="subsection">
+          <h3>🎯 Objetivos de la conciliación</h3>
+          <ul>
+            <li>Confirmar que todos los ingresos y egresos registrados en el sistema coincidan con los movimientos del banco.</li>
+            <li>Detectar posibles errores, duplicidades o diferencias en los registros.</li>
+            <li>Mantener un control financiero confiable y actualizado.</li>
+          </ul>
+        </div>
+
+        <div class="subsection">
+          <h3>🔸 Pasos para realizar la Conciliación Bancaria</h3>
+
+          <div class="procedure">
+            <div class="procedure-title">🧭 Procedimiento</div>
+            <ol class="steps">
+              <li><div class="path"><span>Tesorería</span><span class="arrow">→</span><span>Operaciones</span><span class="arrow">→</span><span>Conciliación Bancaria</span></div></li>
+              <li>Seleccione la <strong>Cuenta bancaria</strong>, el <strong>Mes</strong> y el <strong>Tipo de Movimiento</strong> (todos / conciliados / no conciliados).</li>
+              <li><strong>Verificar los movimientos:</strong> Revise tipo, número de documento, descripción, monto y saldo. Compare con el estado de cuenta del banco.</li>
+              <li><strong>Conciliar individualmente:</strong> Marque la columna <span class="code">CO</span> en los registros que coincidan con los del banco.</li>
+              <li><strong>Conciliar todos de una vez:</strong> Use el botón <em>"Conciliar Manual"</em> solo si ha verificado que no existen discrepancias.</li>
+              <li><strong>Consultar o reversar:</strong> Use <em>Reversar Manual</em> para desmarcar un movimiento conciliado si se detecta un error.</li>
+            </ol>
+          </div>
+
+          <div class="img-placeholder">
+            <div class="ph-icon">🖥️</div>
+            <div class="ph-label">Pantalla del sistema</div>
+            <p>Módulo de Conciliación Bancaria en MIVO</p>
+            <button class="upload-btn">+ Agregar captura de pantalla</button>
+          </div>
+
+          <div class="callout danger">
+            <span class="callout-icon">⚠️</span>
+            <div>Use <strong>Conciliar Manual</strong> (todos los movimientos) solo cuando haya verificado que no existen discrepancias entre el sistema y el estado de cuenta bancario.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ CIERRE DE MES ══ -->
+    <section class="section" id="cierre-mes">
+      <div class="section-header">
+        <span class="s-icon">📅</span>
+        <div>
+          <h2>Cierre de Mes</h2>
+          <p>Revisión, validación y bloqueo de registros del periodo</p>
+        </div>
+      </div>
+      <div class="section-body">
+
+        <p>El Cierre de Mes bloquea los registros administrativos, contables y de inventario del mes en curso, garantizando la integridad de la información antes de su envío al módulo de Contabilidad.</p>
+
+        <div class="subsection">
+          <h3>📋 Etapas del cierre</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Etapa</th><th>Descripción</th></tr></thead>
+              <tbody>
+                <tr><td>1. Verificación de movimientos</td><td>Revisión de todas las operaciones registradas en el periodo.</td></tr>
+                <tr><td>2. Conciliación bancaria</td><td>Comparación de saldos entre sistema y bancos.</td></tr>
+                <tr><td>3. Bloqueo de registros</td><td>Evita modificaciones una vez cerrado el periodo.</td></tr>
+                <tr><td>4. Envío a contabilidad</td><td>Transfiere la información validada para su registro final.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <h3>🔸 Pasos para ejecutar el Cierre de Mes</h3>
+
+          <div class="callout warning">
+            <span class="callout-icon">📌</span>
+            <div>Antes de ejecutar el cierre, asegúrese de haber completado los procesos de <strong>verificación de movimientos, conciliación bancaria y ajuste de saldos</strong> para evitar inconsistencias en los reportes financieros.</div>
+          </div>
+
+          <div class="procedure">
+            <div class="procedure-title">🧭 Procedimiento</div>
+            <ol class="steps">
+              <li>Seleccione <div class="path"><span>Operaciones Especiales</span><span class="arrow">→</span><span>Opciones Especiales</span><span class="arrow">→</span><span>Procesos MIVO Administrativo</span></div></li>
+              <li>Se mostrará la ventana <strong>Procesos Especiales MIVO</strong> con diversas tareas de mantenimiento.</li>
+              <li>Presione el botón <strong>"Cierre de Mes"</strong> y luego <strong>"Ejecutar"</strong> para confirmar la acción.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <span class="callout-icon">✅</span>
+          <div>El proceso de Ingresos de Caja y Banco define una cadena integral que va desde la generación de ventas hasta la conciliación final. Su cumplimiento asegura: control total de ingresos y egresos, transparencia y trazabilidad, e información confiable para la toma de decisiones.</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <strong>Sistema MIVO</strong> · Guía de Optimización de Productividad Organizacional · Versión 28/02/2026
+</footer>
+
+<script>
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.sidebar nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const id = entry.target.id;
+        const active = document.querySelector(`.sidebar nav a[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-80px 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Upload placeholder buttons
+  document.querySelectorAll('.upload-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ph = btn.closest('.img-placeholder');
+      ph.innerHTML = `
+        <div class="ph-icon">📎</div>
+        <div class="ph-label">Listo para imagen</div>
+        <p style="color:var(--blue);font-weight:500">Pegue aquí la captura de pantalla del sistema MIVO</p>
+        <p style="font-size:12px;margin-top:6px">Puede editar este HTML y reemplazar el placeholder con una etiqueta &lt;img&gt;</p>
+      `;
+    });
+  });
+</script>
+</body>
+</html>
