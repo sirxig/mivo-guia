@@ -1291,6 +1291,20 @@
 
 <!-- Soporte MIVO – Widget de Chat -->
 <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+<style>
+  /* Fuerza el widget encima del header sticky */
+  #n8n-chat,
+  .n8n-chat,
+  [class*="chat-window"],
+  [class*="chat-container"],
+  [class*="n8n-chat"] {
+    z-index: 99999 !important;
+    pointer-events: all !important;
+  }
+  #n8n-chat * {
+    pointer-events: all !important;
+  }
+</style>
 <script type="module">
   import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
   createChat({
