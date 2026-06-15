@@ -1304,6 +1304,33 @@
   #n8n-chat * {
     pointer-events: all !important;
   }
+
+  /* Links del chat como botones clicables */
+  .n8n-chat .chat-message-text a,
+  [class*="n8n-chat"] a,
+  [class*="chat-message"] a,
+  [class*="message-text"] a,
+  [class*="chat"] .prose a,
+  [id*="n8n-chat"] a {
+    display: inline-block !important;
+    background-color: #1B4F8A !important;
+    color: #ffffff !important;
+    padding: 6px 14px !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    margin-top: 8px !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease !important;
+  }
+  .n8n-chat .chat-message-text a:hover,
+  [class*="n8n-chat"] a:hover,
+  [class*="chat-message"] a:hover,
+  [class*="message-text"] a:hover,
+  [id*="n8n-chat"] a:hover {
+    background-color: #0F2540 !important;
+  }
 </style>
 <script type="module">
   import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
