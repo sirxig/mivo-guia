@@ -1333,8 +1333,6 @@
   }
 </style>
 <script type="module">
-  const CHAT_ICON = 'https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png';
-
   import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
   createChat({
     webhookUrl: 'https://n8n-n8n.5gx49t.easypanel.host/webhook/512a1c2a-a922-48cd-99ad-cdbfdfa44509/chat',
@@ -1342,7 +1340,7 @@
     chatInputKey: 'chatInput',
     chatSessionKey: 'sessionId',
     initialMessages: [
-      'Bienvenido a Soporte MIVO.\nPara registrar su consulta necesito:\n1. Nombre completo\n2. Nombre de la farmacia\n3. Usuario del sistema MIVO'
+      'Bienvenido a MIVO, el soporte de atención al cliente.\nPara comenzar, indícame el correo electrónico del usuario del sistema.'
     ],
     i18n: {
       en: {
@@ -1355,61 +1353,57 @@
       },
     },
   });
+</script>
 
-  // Reemplazar ícono del botón con imagen personalizada y agregar botón cerrar
-  function customizarChat() {
-    // Buscar el botón toggle del chat
-    const toggleBtn = document.querySelector('.n8n-chat__toggle, [class*="chat-toggle"], [class*="toggle-button"]');
-    if (toggleBtn) {
-      toggleBtn.style.cssText = `
-        background: none !important;
-        border: none !important;
-        padding: 0 !important;
-        width: 64px !important;
-        height: 64px !important;
-        border-radius: 50% !important;
-        overflow: hidden !important;
-        cursor: pointer !important;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.25) !important;
+<script>
+  const CHAT_ICON = 'https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png';
+
+  // Botón personalizado que reemplaza el toggle de n8n/chat
+  const miBoton = document.createElement('button');
+  miBoton.id = 'mivo-chat-btn';
+  miBoton.style.cssText = `
+    position: fixed; bottom: 24px; right: 24px;
+    width: 64px; height: 64px; border-radius: 50%;
+    border: none; padding: 0; overflow: hidden;
+    cursor: pointer; z-index: 99998;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+  `;
+  miBoton.innerHTML = `<img src="${CHAT_ICON}" style="width:100%;height:100%;object-fit:cover;" alt="Soporte MIVO">`;
+  document.body.appendChild(miBoton);
+
+  // Al hacer clic en mi botón, buscar y clickear el toggle real de n8n/chat
+  miBoton.addEventListener('click', () => {
+    const real = document.querySelector('[class*="toggle"][class*="chat"], [class*="chat"][class*="toggle"], button[class*="chat"]');
+    if (real) real.click();
+  });
+
+  // Ocultar el botón original de n8n/chat y agregar botón X al header
+  const observer = new MutationObserver(() => {
+    // Ocultar toggle original (no es mi botón)
+    document.querySelectorAll('button[class*="toggle"], button[class*="chat"]').forEach(btn => {
+      if (btn.id !== 'mivo-chat-btn') btn.style.display = 'none';
+    });
+
+    // Agregar X al header si no existe aún
+    const header = document.querySelector('[class*="chat-header"], [class*="header"][class*="chat"]');
+    if (header && !header.querySelector('#mivo-close-btn')) {
+      const x = document.createElement('button');
+      x.id = 'mivo-close-btn';
+      x.textContent = '✕';
+      x.style.cssText = `
+        position: absolute; top: 10px; right: 12px;
+        background: rgba(255,255,255,0.25); border: none;
+        color: white; font-size: 15px; font-weight: bold;
+        width: 28px; height: 28px; border-radius: 50%;
+        cursor: pointer; display: flex; align-items: center;
+        justify-content: center; z-index: 100000; line-height: 1;
       `;
-      toggleBtn.innerHTML = `<img src="${CHAT_ICON}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="Soporte MIVO">`;
+      x.addEventListener('click', () => miBoton.click());
+      header.style.position = 'relative';
+      header.appendChild(x);
     }
-
-    // Agregar botón X visible en el header del chat
-    const chatHeader = document.querySelector('[class*="chat-header"], [class*="n8n-chat__header"]');
-    if (chatHeader && !chatHeader.querySelector('.custom-close-btn')) {
-      const closeBtn = document.createElement('button');
-      closeBtn.className = 'custom-close-btn';
-      closeBtn.innerHTML = '✕';
-      closeBtn.style.cssText = `
-        position: absolute !important;
-        top: 12px !important;
-        right: 12px !important;
-        background: rgba(255,255,255,0.2) !important;
-        border: none !important;
-        color: white !important;
-        font-size: 16px !important;
-        width: 28px !important;
-        height: 28px !important;
-        border-radius: 50% !important;
-        cursor: pointer !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        z-index: 100000 !important;
-      `;
-      closeBtn.onclick = () => toggleBtn && toggleBtn.click();
-      chatHeader.style.position = 'relative';
-      chatHeader.appendChild(closeBtn);
-    }
-  }
-
-  // Intentar cada 300ms hasta encontrar los elementos (máx 10 seg)
-  let intentos = 0;
-  const intervalo = setInterval(() => {
-    customizarChat();
-    if (++intentos > 33) clearInterval(intervalo);
-  }, 300);
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
 </script>
 </body>
 </html>
