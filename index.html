@@ -1358,52 +1358,60 @@
 <script>
   const CHAT_ICON = 'https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png';
 
-  // Botón personalizado que reemplaza el toggle de n8n/chat
+  // Buscar el toggle real dentro de #n8n-chat (siempre se renderiza ahí)
+  function getRealToggle() {
+    const root = document.getElementById('n8n-chat');
+    return root ? root.querySelector('button') : null;
+  }
+
+  // Mi botón personalizado con la imagen
   const miBoton = document.createElement('button');
   miBoton.id = 'mivo-chat-btn';
-  miBoton.style.cssText = `
-    position: fixed; bottom: 24px; right: 24px;
-    width: 64px; height: 64px; border-radius: 50%;
-    border: none; padding: 0; overflow: hidden;
-    cursor: pointer; z-index: 99998;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.35);
-  `;
-  miBoton.innerHTML = `<img src="${CHAT_ICON}" style="width:100%;height:100%;object-fit:cover;" alt="Soporte MIVO">`;
+  miBoton.style.cssText = [
+    'position:fixed', 'bottom:24px', 'right:24px',
+    'width:64px', 'height:64px', 'border-radius:50%',
+    'border:none', 'padding:0', 'overflow:hidden',
+    'cursor:pointer', 'z-index:999999',
+    'box-shadow:0 4px 20px rgba(0,0,0,0.4)',
+    'background:transparent'
+  ].join(';');
+  miBoton.innerHTML = '<img src="' + CHAT_ICON + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" alt="Soporte MIVO">';
   document.body.appendChild(miBoton);
 
-  // Al hacer clic en mi botón, buscar y clickear el toggle real de n8n/chat
-  miBoton.addEventListener('click', () => {
-    const real = document.querySelector('[class*="toggle"][class*="chat"], [class*="chat"][class*="toggle"], button[class*="chat"]');
+  miBoton.addEventListener('click', function() {
+    var real = getRealToggle();
     if (real) real.click();
   });
 
-  // Ocultar el botón original de n8n/chat y agregar botón X al header
-  const observer = new MutationObserver(() => {
-    // Ocultar toggle original (no es mi botón)
-    document.querySelectorAll('button[class*="toggle"], button[class*="chat"]').forEach(btn => {
-      if (btn.id !== 'mivo-chat-btn') btn.style.display = 'none';
-    });
+  // MutationObserver: ocultar toggle original y agregar X al header
+  new MutationObserver(function() {
+    // Ocultar el toggle original de n8n/chat
+    var real = getRealToggle();
+    if (real && real.style.display !== 'none') {
+      real.style.cssText = 'display:none!important;';
+    }
 
-    // Agregar X al header si no existe aún
-    const header = document.querySelector('[class*="chat-header"], [class*="header"][class*="chat"]');
-    if (header && !header.querySelector('#mivo-close-btn')) {
-      const x = document.createElement('button');
+    // Agregar X al header si el chat está abierto
+    var root = document.getElementById('n8n-chat');
+    if (!root) return;
+    var header = root.querySelector('[class*="header"]');
+    if (header && !document.getElementById('mivo-close-btn')) {
+      var x = document.createElement('button');
       x.id = 'mivo-close-btn';
       x.textContent = '✕';
-      x.style.cssText = `
-        position: absolute; top: 10px; right: 12px;
-        background: rgba(255,255,255,0.25); border: none;
-        color: white; font-size: 15px; font-weight: bold;
-        width: 28px; height: 28px; border-radius: 50%;
-        cursor: pointer; display: flex; align-items: center;
-        justify-content: center; z-index: 100000; line-height: 1;
-      `;
-      x.addEventListener('click', () => miBoton.click());
+      x.style.cssText = [
+        'position:absolute', 'top:10px', 'right:12px',
+        'background:rgba(255,255,255,0.25)', 'border:none',
+        'color:white', 'font-size:16px', 'font-weight:bold',
+        'width:28px', 'height:28px', 'border-radius:50%',
+        'cursor:pointer', 'z-index:1000001', 'line-height:1',
+        'display:flex', 'align-items:center', 'justify-content:center'
+      ].join(';');
+      x.addEventListener('click', function() { miBoton.click(); });
       header.style.position = 'relative';
       header.appendChild(x);
     }
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
+  }).observe(document.body, { childList: true, subtree: true });
 </script>
 </body>
 </html>
