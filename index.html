@@ -1355,17 +1355,94 @@
   });
 </script>
 
-<script>
-  var CHAT_ICON = 'https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png';
-  var cachedToggle = null;
+<!-- Widget flotante Soporte MIVO -->
+<div id="mivo-widget" role="button" aria-label="Abrir Soporte MIVO">
+  <div id="mivo-bubble">
+    <svg width="15" height="15" viewBox="0 0 20 20" fill="white" style="flex-shrink:0">
+      <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2H6l-4 4V5z"/>
+    </svg>
+    <span>En caso de que tengas dudas, pregúntame</span>
+  </div>
+  <div id="mivo-avatar">
+    <img src="https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png" alt="Soporte MIVO">
+  </div>
+</div>
 
-  function inyectarImagen(btn) {
-    btn.style.cssText = 'background:transparent!important;border:none!important;padding:0!important;overflow:hidden!important;cursor:pointer!important;';
-    btn.innerHTML = '<img src="' + CHAT_ICON + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" alt="Soporte MIVO">';
+<style>
+  #mivo-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
   }
+  #mivo-bubble {
+    background: #1a1a2e;
+    color: #fff;
+    padding: 10px 18px 10px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+  }
+  #mivo-bubble.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  #mivo-avatar {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 0 4px #dc2626, 0 4px 24px rgba(0,0,0,0.35);
+    flex-shrink: 0;
+  }
+  #mivo-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+</style>
 
-  // Polling: espera a que haya exactamente UN botón visible = chat cerrado = ese es el toggle
-  var timer = setInterval(function() {
+<script>
+  var cachedToggle = null;
+  var chatAbierto = false;
+
+  // Burbuja aparece con animación suave tras 1.5s
+  setTimeout(function() {
+    document.getElementById('mivo-bubble').classList.add('show');
+  }, 1500);
+
+  // Clic en avatar o burbuja → abre/cierra el panel de n8n
+  document.getElementById('mivo-widget').addEventListener('click', function() {
+    if (!cachedToggle) return;
+    cachedToggle.click();
+    chatAbierto = !chatAbierto;
+    var bubble = document.getElementById('mivo-bubble');
+    if (chatAbierto) {
+      bubble.classList.remove('show');
+    } else {
+      setTimeout(function() { bubble.classList.add('show'); }, 300);
+    }
+  });
+
+  // Polling: un solo botón visible en #n8n-chat = chat cerrado = ese es el toggle
+  var findTimer = setInterval(function() {
     var root = document.getElementById('n8n-chat');
     if (!root) return;
     var btns = root.querySelectorAll('button');
@@ -1375,17 +1452,16 @@
     }
     if (visibles.length === 1) {
       cachedToggle = visibles[0];
-      inyectarImagen(cachedToggle);
-      clearInterval(timer);
+      cachedToggle.style.display = 'none';
+      clearInterval(findTimer);
     }
   }, 200);
 
-  // MutationObserver: re-aplicar imagen si n8n la resetea, y agregar X al header
+  // MutationObserver: mantener toggle original oculto y agregar X al header
   new MutationObserver(function() {
-    if (cachedToggle && !cachedToggle.querySelector('img[alt="Soporte MIVO"]')) {
-      inyectarImagen(cachedToggle);
+    if (cachedToggle && cachedToggle.style.display !== 'none') {
+      cachedToggle.style.display = 'none';
     }
-
     var root = document.getElementById('n8n-chat');
     if (!root || !cachedToggle) return;
     var header = root.querySelector('[class*="header"]');
@@ -1401,7 +1477,13 @@
         'cursor:pointer', 'z-index:1000001', 'line-height:28px',
         'text-align:center', 'padding:0'
       ].join(';');
-      x.addEventListener('click', function() { cachedToggle.click(); });
+      x.addEventListener('click', function() {
+        if (cachedToggle) cachedToggle.click();
+        chatAbierto = false;
+        setTimeout(function() {
+          document.getElementById('mivo-bubble').classList.add('show');
+        }, 300);
+      });
       header.style.position = 'relative';
       header.appendChild(x);
     }
