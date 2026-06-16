@@ -1356,19 +1356,10 @@
 </script>
 
 <!-- Widget flotante Soporte MIVO -->
-<div id="mivo-widget" role="button" aria-label="Abrir Soporte MIVO">
-  <div id="mivo-bubble">
-    <svg width="15" height="15" viewBox="0 0 20 20" fill="white" style="flex-shrink:0">
-      <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2H6l-4 4V5z"/>
-    </svg>
-    <span>En caso de que tengas dudas, pregúntame</span>
-  </div>
-  <div id="mivo-avatar">
-    <img src="https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png" alt="Soporte MIVO">
-  </div>
-</div>
-
 <style>
+  /* Ocultar botón toggle original de n8n/chat — CSS aplicado antes que el JS */
+  #n8n-chat > div > button { display: none !important; }
+
   #mivo-widget {
     position: fixed;
     bottom: 24px;
@@ -1419,51 +1410,55 @@
   }
 </style>
 
+<div id="mivo-widget">
+  <div id="mivo-bubble">
+    <svg width="15" height="15" viewBox="0 0 20 20" fill="white" style="flex-shrink:0">
+      <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2H6l-4 4V5z"/>
+    </svg>
+    <span>En caso de que tengas dudas, pregúntame</span>
+  </div>
+  <div id="mivo-avatar">
+    <img src="https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png" alt="Soporte MIVO">
+  </div>
+</div>
+
 <script>
-  var cachedToggle = null;
   var chatAbierto = false;
 
-  // Burbuja aparece con animación suave tras 1.5s
-  setTimeout(function() {
-    document.getElementById('mivo-bubble').classList.add('show');
-  }, 1500);
+  function toggleChat() {
+    var btn = document.querySelector('#n8n-chat > div > button') ||
+              document.querySelector('#n8n-chat button');
+    if (!btn) return false;
+    btn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    return true;
+  }
 
-  // Clic en avatar o burbuja → abre/cierra el panel de n8n
+  function mostrarBurbuja() {
+    document.getElementById('mivo-bubble').classList.add('show');
+  }
+  function ocultarBurbuja() {
+    document.getElementById('mivo-bubble').classList.remove('show');
+  }
+
+  // Burbuja aparece 1.5s después de cargar
+  setTimeout(mostrarBurbuja, 1500);
+
+  // Clic en avatar o burbuja → abre/cierra chat
   document.getElementById('mivo-widget').addEventListener('click', function() {
-    if (!cachedToggle) return;
-    cachedToggle.click();
+    var ok = toggleChat();
+    if (!ok) return;
     chatAbierto = !chatAbierto;
-    var bubble = document.getElementById('mivo-bubble');
     if (chatAbierto) {
-      bubble.classList.remove('show');
+      ocultarBurbuja();
     } else {
-      setTimeout(function() { bubble.classList.add('show'); }, 300);
+      setTimeout(mostrarBurbuja, 300);
     }
   });
 
-  // Polling: un solo botón visible en #n8n-chat = chat cerrado = ese es el toggle
-  var findTimer = setInterval(function() {
+  // Agregar botón X al header cuando el chat se abra
+  new MutationObserver(function() {
     var root = document.getElementById('n8n-chat');
     if (!root) return;
-    var btns = root.querySelectorAll('button');
-    var visibles = [];
-    for (var i = 0; i < btns.length; i++) {
-      if (btns[i].getBoundingClientRect().width > 0) visibles.push(btns[i]);
-    }
-    if (visibles.length === 1) {
-      cachedToggle = visibles[0];
-      cachedToggle.style.display = 'none';
-      clearInterval(findTimer);
-    }
-  }, 200);
-
-  // MutationObserver: mantener toggle original oculto y agregar X al header
-  new MutationObserver(function() {
-    if (cachedToggle && cachedToggle.style.display !== 'none') {
-      cachedToggle.style.display = 'none';
-    }
-    var root = document.getElementById('n8n-chat');
-    if (!root || !cachedToggle) return;
     var header = root.querySelector('[class*="header"]');
     if (header && !document.getElementById('mivo-close-btn')) {
       var x = document.createElement('button');
@@ -1478,11 +1473,9 @@
         'text-align:center', 'padding:0'
       ].join(';');
       x.addEventListener('click', function() {
-        if (cachedToggle) cachedToggle.click();
+        toggleChat();
         chatAbierto = false;
-        setTimeout(function() {
-          document.getElementById('mivo-bubble').classList.add('show');
-        }, 300);
+        setTimeout(mostrarBurbuja, 300);
       });
       header.style.position = 'relative';
       header.appendChild(x);
