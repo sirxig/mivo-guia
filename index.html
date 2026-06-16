@@ -1356,42 +1356,37 @@
 </script>
 
 <script>
-  const CHAT_ICON = 'https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png';
+  var CHAT_ICON = 'https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png';
+  var cachedToggle = null;
 
-  // Buscar el toggle real dentro de #n8n-chat (siempre se renderiza ahí)
-  function getRealToggle() {
-    const root = document.getElementById('n8n-chat');
-    return root ? root.querySelector('button') : null;
+  // El toggle de n8n/chat es el único botón con position:fixed dentro de #n8n-chat
+  function encontrarToggle() {
+    var root = document.getElementById('n8n-chat');
+    if (!root) return null;
+    var btns = root.querySelectorAll('button');
+    for (var i = 0; i < btns.length; i++) {
+      if (window.getComputedStyle(btns[i]).position === 'fixed') return btns[i];
+    }
+    // Fallback: si solo hay un botón visible (chat cerrado), ese es el toggle
+    if (btns.length === 1) return btns[0];
+    return null;
   }
 
-  // Mi botón personalizado con la imagen
-  const miBoton = document.createElement('button');
-  miBoton.id = 'mivo-chat-btn';
-  miBoton.style.cssText = [
-    'position:fixed', 'bottom:24px', 'right:24px',
-    'width:64px', 'height:64px', 'border-radius:50%',
-    'border:none', 'padding:0', 'overflow:hidden',
-    'cursor:pointer', 'z-index:999999',
-    'box-shadow:0 4px 20px rgba(0,0,0,0.4)',
-    'background:transparent'
-  ].join(';');
-  miBoton.innerHTML = '<img src="' + CHAT_ICON + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" alt="Soporte MIVO">';
-  document.body.appendChild(miBoton);
-
-  miBoton.addEventListener('click', function() {
-    var real = getRealToggle();
-    if (real) real.click();
-  });
-
-  // MutationObserver: ocultar toggle original y agregar X al header
   new MutationObserver(function() {
-    // Ocultar el toggle original de n8n/chat
-    var real = getRealToggle();
-    if (real && real.style.display !== 'none') {
-      real.style.cssText = 'display:none!important;';
+    // Cachear el toggle y reemplazar su ícono con la imagen personalizada
+    if (!cachedToggle) {
+      var t = encontrarToggle();
+      if (t) {
+        cachedToggle = t;
+        t.style.cssText = 'background:transparent!important;border:none!important;padding:0!important;overflow:hidden!important;cursor:pointer!important;';
+        t.innerHTML = '<img src="' + CHAT_ICON + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" alt="Soporte MIVO">';
+      }
+    } else if (!cachedToggle.querySelector('img[alt="Soporte MIVO"]')) {
+      // n8n/chat reseteo el botón — volver a inyectar
+      cachedToggle.innerHTML = '<img src="' + CHAT_ICON + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" alt="Soporte MIVO">';
     }
 
-    // Agregar X al header si el chat está abierto
+    // Agregar botón X al header del chat
     var root = document.getElementById('n8n-chat');
     if (!root) return;
     var header = root.querySelector('[class*="header"]');
@@ -1404,10 +1399,12 @@
         'background:rgba(255,255,255,0.25)', 'border:none',
         'color:white', 'font-size:16px', 'font-weight:bold',
         'width:28px', 'height:28px', 'border-radius:50%',
-        'cursor:pointer', 'z-index:1000001', 'line-height:1',
-        'display:flex', 'align-items:center', 'justify-content:center'
+        'cursor:pointer', 'z-index:1000001', 'line-height:28px',
+        'text-align:center', 'padding:0'
       ].join(';');
-      x.addEventListener('click', function() { miBoton.click(); });
+      x.addEventListener('click', function() {
+        if (cachedToggle) cachedToggle.click();
+      });
       header.style.position = 'relative';
       header.appendChild(x);
     }
