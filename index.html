@@ -1426,9 +1426,41 @@
   var chatAbierto = false;
 
   function toggleChat() {
-    var btn = document.querySelector('#n8n-chat > div > button') ||
-              document.querySelector('#n8n-chat button');
-    if (!btn) return false;
+    // Intento 1: selector directo hijo de #n8n-chat
+    var btn = document.querySelector('#n8n-chat > div > button');
+    console.log('[MIVO] Intento 1 (#n8n-chat > div > button):', btn);
+
+    // Intento 2: cualquier botón dentro de #n8n-chat
+    if (!btn) {
+      btn = document.querySelector('#n8n-chat button');
+      console.log('[MIVO] Intento 2 (#n8n-chat button):', btn);
+    }
+
+    // Intento 3: shadow DOM
+    if (!btn) {
+      var host = document.querySelector('#n8n-chat');
+      if (host && host.shadowRoot) {
+        btn = host.shadowRoot.querySelector('button');
+        console.log('[MIVO] Intento 3 (shadowRoot button):', btn);
+      }
+    }
+
+    // Intento 4: cualquier elemento n8n con botón
+    if (!btn) {
+      var all = document.querySelectorAll('[id*="n8n"] button, [class*="n8n"] button');
+      console.log('[MIVO] Intento 4 (n8n* button) count:', all.length, all);
+      if (all.length > 0) btn = all[0];
+    }
+
+    // Log diagnóstico si nada funciona
+    if (!btn) {
+      console.warn('[MIVO] ❌ No se encontró el botón. DOM n8n:',
+        document.querySelector('[id*="n8n"]'),
+        '| Todos los botones en body:', document.querySelectorAll('button'));
+      return false;
+    }
+
+    console.log('[MIVO] ✅ Click en:', btn);
     btn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
     return true;
   }
@@ -1445,6 +1477,7 @@
 
   // Clic en avatar o burbuja → abre/cierra chat
   document.getElementById('mivo-widget').addEventListener('click', function() {
+    console.log('[MIVO] Avatar/burbuja clickeado ✅');
     var ok = toggleChat();
     if (!ok) return;
     chatAbierto = !chatAbierto;
