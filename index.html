@@ -1359,49 +1359,35 @@
   var CHAT_ICON = 'https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png';
   var cachedToggle = null;
 
-  // Imagen superpuesta sobre el botón rojo — sin pointer-events para no bloquear clicks
-  var imgOverlay = document.createElement('img');
-  imgOverlay.src = CHAT_ICON;
-  imgOverlay.alt = 'Soporte MIVO';
-  imgOverlay.style.cssText = [
-    'position:fixed', 'border-radius:50%', 'object-fit:cover',
-    'pointer-events:none', 'z-index:999999', 'display:none',
-    'box-shadow:0 4px 20px rgba(0,0,0,0.4)'
-  ].join(';');
-  document.body.appendChild(imgOverlay);
-
-  function actualizarOverlay() {
-    if (!cachedToggle) return;
-    var r = cachedToggle.getBoundingClientRect();
-    if (r.width > 0) {
-      imgOverlay.style.left   = r.left + 'px';
-      imgOverlay.style.top    = r.top  + 'px';
-      imgOverlay.style.width  = r.width  + 'px';
-      imgOverlay.style.height = r.height + 'px';
-      imgOverlay.style.display = 'block';
-    }
+  function inyectarImagen(btn) {
+    btn.style.cssText = 'background:transparent!important;border:none!important;padding:0!important;overflow:hidden!important;cursor:pointer!important;';
+    btn.innerHTML = '<img src="' + CHAT_ICON + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" alt="Soporte MIVO">';
   }
 
-  new MutationObserver(function() {
+  // Polling: espera a que haya exactamente UN botón visible = chat cerrado = ese es el toggle
+  var timer = setInterval(function() {
     var root = document.getElementById('n8n-chat');
     if (!root) return;
+    var btns = root.querySelectorAll('button');
+    var visibles = [];
+    for (var i = 0; i < btns.length; i++) {
+      if (btns[i].getBoundingClientRect().width > 0) visibles.push(btns[i]);
+    }
+    if (visibles.length === 1) {
+      cachedToggle = visibles[0];
+      inyectarImagen(cachedToggle);
+      clearInterval(timer);
+    }
+  }, 200);
 
-    // Encontrar el toggle: botón en la esquina inferior derecha
-    if (!cachedToggle) {
-      var btns = root.querySelectorAll('button');
-      for (var i = 0; i < btns.length; i++) {
-        var r = btns[i].getBoundingClientRect();
-        if (r.bottom > window.innerHeight - 120 && r.right > window.innerWidth - 120 && r.width > 30) {
-          cachedToggle = btns[i];
-          actualizarOverlay();
-          break;
-        }
-      }
-    } else {
-      actualizarOverlay();
+  // MutationObserver: re-aplicar imagen si n8n la resetea, y agregar X al header
+  new MutationObserver(function() {
+    if (cachedToggle && !cachedToggle.querySelector('img[alt="Soporte MIVO"]')) {
+      inyectarImagen(cachedToggle);
     }
 
-    // Agregar botón X al header del chat
+    var root = document.getElementById('n8n-chat');
+    if (!root || !cachedToggle) return;
     var header = root.querySelector('[class*="header"]');
     if (header && !document.getElementById('mivo-close-btn')) {
       var x = document.createElement('button');
@@ -1415,15 +1401,11 @@
         'cursor:pointer', 'z-index:1000001', 'line-height:28px',
         'text-align:center', 'padding:0'
       ].join(';');
-      x.addEventListener('click', function() {
-        if (cachedToggle) cachedToggle.click();
-      });
+      x.addEventListener('click', function() { cachedToggle.click(); });
       header.style.position = 'relative';
       header.appendChild(x);
     }
   }).observe(document.body, { childList: true, subtree: true });
-
-  window.addEventListener('resize', actualizarOverlay);
 </script>
 </body>
 </html>
