@@ -1290,230 +1290,136 @@
 </script>
 
 <!-- Soporte MIVO – Widget de Chat -->
-<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 <style>
-  /* Fuerza el widget encima del header sticky */
-  #n8n-chat,
-  .n8n-chat,
-  [class*="chat-window"],
-  [class*="chat-container"],
-  [class*="n8n-chat"] {
-    z-index: 99999 !important;
-    pointer-events: all !important;
-  }
-  #n8n-chat * {
-    pointer-events: all !important;
-  }
-
-  /* Links del chat como botones clicables */
-  .n8n-chat .chat-message-text a,
-  [class*="n8n-chat"] a,
-  [class*="chat-message"] a,
-  [class*="message-text"] a,
-  [class*="chat"] .prose a,
-  [id*="n8n-chat"] a {
-    display: inline-block !important;
-    background-color: #1B4F8A !important;
-    color: #ffffff !important;
-    padding: 6px 14px !important;
-    border-radius: 6px !important;
-    text-decoration: none !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    margin-top: 8px !important;
-    cursor: pointer !important;
-    transition: background-color 0.2s ease !important;
-  }
-  .n8n-chat .chat-message-text a:hover,
-  [class*="n8n-chat"] a:hover,
-  [class*="chat-message"] a:hover,
-  [class*="message-text"] a:hover,
-  [id*="n8n-chat"] a:hover {
-    background-color: #0F2540 !important;
-  }
-</style>
-<script type="module">
-  import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-  createChat({
-    webhookUrl: 'https://n8n-n8n.5gx49t.easypanel.host/webhook/512a1c2a-a922-48cd-99ad-cdbfdfa44509/chat',
-    mode: 'window',
-    chatInputKey: 'chatInput',
-    chatSessionKey: 'sessionId',
-    initialMessages: [
-      'Bienvenido a MIVO, el soporte de atención al cliente.\nPara comenzar, indícame el correo electrónico del usuario del sistema.'
-    ],
-    i18n: {
-      en: {
-        title: 'Soporte MIVO',
-        subtitle: 'Asistente técnico · Mervis Technology',
-        footer: '',
-        getStarted: 'Nueva consulta',
-        inputPlaceholder: 'Escriba su consulta...',
-        closeButtonTooltip: 'Cerrar chat',
-      },
-    },
-  });
-</script>
-
-<!-- Widget flotante Soporte MIVO -->
-<style>
-  /* Ocultar botón toggle original de n8n/chat — CSS aplicado antes que el JS */
-  #n8n-chat > div > button { display: none !important; }
-
-  #mivo-widget {
+  .mivo-btn {
     position: fixed;
     bottom: 24px;
     right: 24px;
-    z-index: 999999;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 10px;
+    z-index: 9998;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    border: 4px solid #dc2626;
+    background-image: url('https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png');
+    background-size: cover;
+    background-position: center;
     cursor: pointer;
-    user-select: none;
+    box-shadow: 0 4px 20px rgba(220,38,38,0.35);
+    padding: 0;
+    animation: mivoPulse 2.5s ease-in-out infinite;
   }
-  #mivo-bubble {
+  .mivo-btn:hover { transform: scale(1.07); }
+  @keyframes mivoPulse {
+    0%,100% { box-shadow: 0 4px 20px rgba(220,38,38,0.3); }
+    50%      { box-shadow: 0 4px 32px rgba(220,38,38,0.6); }
+  }
+  .mivo-label {
+    position: fixed;
+    bottom: 120px;
+    right: 24px;
+    z-index: 9997;
     background: #1a1a2e;
     color: #fff;
-    padding: 10px 18px 10px 14px;
+    padding: 10px 16px 10px 12px;
     border-radius: 999px;
     font-size: 13px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
     transition: opacity 0.4s ease, transform 0.4s ease;
     pointer-events: none;
   }
-  #mivo-bubble.show {
+  .mivo-label.show {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
   }
-  #mivo-avatar {
-    width: 84px;
-    height: 84px;
-    border-radius: 50%;
+  .mivo-window {
+    display: none;
+    position: fixed;
+    bottom: 120px;
+    right: 24px;
+    z-index: 99999;
+    width: 380px;
+    height: 560px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 0 0 4px #dc2626, 0 4px 24px rgba(0,0,0,0.35);
-    flex-shrink: 0;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.45);
+    border: 1px solid rgba(0,0,0,0.08);
   }
-  #mivo-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .mivo-window.open {
     display: block;
+    animation: mivoSlideUp 0.3s ease-out;
+  }
+  @keyframes mivoSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .mivo-window iframe { width: 100%; height: 100%; border: none; }
+  .mivo-close {
+    position: absolute;
+    top: 10px; right: 10px;
+    z-index: 100000;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  @media (max-width: 480px) {
+    .mivo-btn   { width: 64px; height: 64px; border-width: 3px; bottom: 16px; right: 16px; }
+    .mivo-label { bottom: 92px; right: 16px; font-size: 12px; }
+    .mivo-window { bottom: 0; right: 0; left: 0; width: 100%; height: 85vh; border-radius: 16px 16px 0 0; }
   }
 </style>
-
-<div id="mivo-widget">
-  <div id="mivo-bubble">
-    <svg width="15" height="15" viewBox="0 0 20 20" fill="white" style="flex-shrink:0">
-      <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2H6l-4 4V5z"/>
-    </svg>
-    <span>En caso de que tengas dudas, pregúntame</span>
-  </div>
-  <div id="mivo-avatar">
-    <img src="https://d1yei2z3i6k35z.cloudfront.net/17734400/6a108dc6c2c8f1.86568275_ChatGPTImageMay22202606_09_10PM.png" alt="Soporte MIVO">
-  </div>
+<div class="mivo-label" id="mivoLabel" onclick="toggleMivo()">
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="white" style="flex-shrink:0">
+    <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2H6l-4 4V5z"/>
+  </svg>
+  En caso de que tengas dudas, pregúntame
+</div>
+<button class="mivo-btn" id="mivoBtn" onclick="toggleMivo()"></button>
+<div class="mivo-window" id="mivoWindow">
+  <button class="mivo-close" onclick="toggleMivo()">✕</button>
+  <iframe id="mivoFrame" src="" allow="microphone"></iframe>
 </div>
 
 <script>
-  var chatAbierto = false;
+  var mivoOpen = false;
+  var mivoLoaded = false;
+  var mivoUrl = 'https://n8n-n8n.5gx49t.easypanel.host/webhook/512a1c2a-a922-48cd-99ad-cdbfdfa44509/chat';
 
-  function toggleChat() {
-    // Intento 1: selector directo hijo de #n8n-chat
-    var btn = document.querySelector('#n8n-chat > div > button');
-    console.log('[MIVO] Intento 1 (#n8n-chat > div > button):', btn);
-
-    // Intento 2: cualquier botón dentro de #n8n-chat
-    if (!btn) {
-      btn = document.querySelector('#n8n-chat button');
-      console.log('[MIVO] Intento 2 (#n8n-chat button):', btn);
-    }
-
-    // Intento 3: shadow DOM
-    if (!btn) {
-      var host = document.querySelector('#n8n-chat');
-      if (host && host.shadowRoot) {
-        btn = host.shadowRoot.querySelector('button');
-        console.log('[MIVO] Intento 3 (shadowRoot button):', btn);
+  function toggleMivo() {
+    var win   = document.getElementById('mivoWindow');
+    var label = document.getElementById('mivoLabel');
+    if (!mivoOpen) {
+      if (!mivoLoaded) {
+        document.getElementById('mivoFrame').src = mivoUrl;
+        mivoLoaded = true;
       }
+      win.classList.add('open');
+      label.classList.remove('show');
+      mivoOpen = true;
+    } else {
+      win.classList.remove('open');
+      setTimeout(function() { label.classList.add('show'); }, 300);
+      mivoOpen = false;
     }
-
-    // Intento 4: cualquier elemento n8n con botón
-    if (!btn) {
-      var all = document.querySelectorAll('[id*="n8n"] button, [class*="n8n"] button');
-      console.log('[MIVO] Intento 4 (n8n* button) count:', all.length, all);
-      if (all.length > 0) btn = all[0];
-    }
-
-    // Log diagnóstico si nada funciona
-    if (!btn) {
-      console.warn('[MIVO] ❌ No se encontró el botón. DOM n8n:',
-        document.querySelector('[id*="n8n"]'),
-        '| Todos los botones en body:', document.querySelectorAll('button'));
-      return false;
-    }
-
-    console.log('[MIVO] ✅ Click en:', btn);
-    btn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-    return true;
-  }
-
-  function mostrarBurbuja() {
-    document.getElementById('mivo-bubble').classList.add('show');
-  }
-  function ocultarBurbuja() {
-    document.getElementById('mivo-bubble').classList.remove('show');
   }
 
   // Burbuja aparece 1.5s después de cargar
-  setTimeout(mostrarBurbuja, 1500);
-
-  // Clic en avatar o burbuja → abre/cierra chat
-  document.getElementById('mivo-widget').addEventListener('click', function() {
-    console.log('[MIVO] Avatar/burbuja clickeado ✅');
-    var ok = toggleChat();
-    if (!ok) return;
-    chatAbierto = !chatAbierto;
-    if (chatAbierto) {
-      ocultarBurbuja();
-    } else {
-      setTimeout(mostrarBurbuja, 300);
-    }
-  });
-
-  // Agregar botón X al header cuando el chat se abra
-  new MutationObserver(function() {
-    var root = document.getElementById('n8n-chat');
-    if (!root) return;
-    var header = root.querySelector('[class*="header"]');
-    if (header && !document.getElementById('mivo-close-btn')) {
-      var x = document.createElement('button');
-      x.id = 'mivo-close-btn';
-      x.textContent = '✕';
-      x.style.cssText = [
-        'position:absolute', 'top:10px', 'right:12px',
-        'background:rgba(255,255,255,0.25)', 'border:none',
-        'color:white', 'font-size:16px', 'font-weight:bold',
-        'width:28px', 'height:28px', 'border-radius:50%',
-        'cursor:pointer', 'z-index:1000001', 'line-height:28px',
-        'text-align:center', 'padding:0'
-      ].join(';');
-      x.addEventListener('click', function() {
-        toggleChat();
-        chatAbierto = false;
-        setTimeout(mostrarBurbuja, 300);
-      });
-      header.style.position = 'relative';
-      header.appendChild(x);
-    }
-  }).observe(document.body, { childList: true, subtree: true });
+  setTimeout(function() {
+    document.getElementById('mivoLabel').classList.add('show');
+  }, 1500);
 </script>
 </body>
 </html>
